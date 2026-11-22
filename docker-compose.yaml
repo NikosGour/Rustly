@@ -1,0 +1,21 @@
+name: rustly
+services:
+  database:
+    image: postgres:17.9
+    expose:
+      - 5432
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=${POSTGRES_ROOT_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - database_data:/var/lib/postgresql/data
+
+volumes:
+  database_data:
