@@ -1,12 +1,19 @@
-use std::sync::Arc;
 use sqlx::PgPool;
+use std::sync::Arc;
 
-pub struct UrlRepository<'db_pool> {
-    pub pool: &'db_pool PgPool
+pub struct UrlRepository {
+    pub pool: Arc<PgPool>,
 }
 
-impl<'a> UrlRepository<'a> {
-     pub async fn insert_url(&self, url: &str) {
-        sqlx::query!(r#"SELECT 1 as nikos"#).fetch_one(self.pool).await.unwrap();
+impl UrlRepository {
+    pub async fn insert_url(&self, url: &str) {
+        sqlx::query!(
+            r#"INSERT INTO "url"("full_url", "short_url", "created_at", "last_modified_at")
+                        VALUES ('nikos',$1,now(),NULL)"#,
+            url
+        )
+        .execute(self.pool.as_ref())
+        .await
+        .unwrap();
     }
 }

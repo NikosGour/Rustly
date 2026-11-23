@@ -22,7 +22,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
     println!("row: {}",row.0);
 
-    let app_ = app(AppState::new(&pool));
+    let app = app(AppState::new(pool));
     let listening_address = format!(
         "0.0.0.0:{}",
         dotenvy::var(Env::PORT.as_str()).unwrap_or(7000.to_string())
@@ -32,7 +32,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
     println!("Listening on address: {listening_address}");
 
-    axum::serve(listener, app_).await.expect("on serve");
+    axum::serve(listener, app).await.expect("on serve");
 
     Ok(())
 }

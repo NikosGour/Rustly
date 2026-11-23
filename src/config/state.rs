@@ -4,43 +4,48 @@ use crate::services::UrlService;
 use sqlx::PgPool;
 use std::sync::Arc;
 
-pub struct AppState<'db_pool> {
-    repositories: Repositories<'db_pool>,
-    services: Services<'db_pool>,
-    pub controllers: Controllers<'db_pool>,
+#[derive(Clone)]
+pub struct AppState {
+    _repositories: Repositories,
+    _services: Services,
+    pub controllers: Controllers,
 }
 
-struct Repositories<'db_pool> {
-    url_repository: Arc<UrlRepository<'db_pool>>,
+#[derive(Clone)]
+struct Repositories {
+    url_repository: Arc<UrlRepository>,
 }
 
-struct Services<'db_pool> {
-    url_service: Arc<UrlService<'db_pool>>,
+#[derive(Clone)]
+struct Services {
+    url_service: Arc<UrlService>,
 }
 
-pub struct Controllers<'db_pool> {
-    pub url_controller: UrlController<'db_pool>,
+#[derive(Clone)]
+pub struct Controllers {
+    pub url_controller: UrlController,
 }
 
-impl<'db_pool> AppState<'db_pool> {
-    pub fn new(pool: &'db_pool PgPool) -> AppState<'db_pool> {
-        let repositories = Self::create_repositories(pool);
+impl AppState {
+    pub fn new(pool: PgPool) -> AppState {
+        let pool = Arc::new(pool);
+        let repositories = Self::create_repositories(Arc::clone(&pool));
         let services = Self::create_services(&repositories);
         let controllers = Self::create_controllers(&services);
 
         AppState {
-            repositories,
-            services,
+            _repositories: repositories,
+            _services: services,
             controllers,
         }
     }
 
-    fn create_repositories(pool: &PgPool) -> Repositories<'_> {
+    fn create_repositories(pool: Arc<PgPool>) -> Repositories {
         let url_repository = Arc::new(UrlRepository { pool });
         Repositories { url_repository }
     }
 
-    fn create_services(repositories: &Repositories<'db_pool>) -> Services<'db_pool> {
+    fn create_services(repositories: &Repositories) -> Services {
         let url_service = Arc::new(UrlService {
             url_repository: Arc::clone(&repositories.url_repository),
         });
@@ -48,7 +53,7 @@ impl<'db_pool> AppState<'db_pool> {
         Services { url_service }
     }
 
-    fn create_controllers(services: &Services<'db_pool>) -> Controllers<'db_pool> {
+    fn create_controllers(services: &Services) -> Controllers {
         let url_controller = UrlController {
             url_service: Arc::clone(&services.url_service),
         };

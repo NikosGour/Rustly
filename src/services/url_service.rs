@@ -1,13 +1,13 @@
 use crate::repositories::UrlRepository;
 use std::sync::Arc;
 
-pub struct UrlService<'db_pool> {
-    pub url_repository: Arc<UrlRepository<'db_pool>>,
+pub struct UrlService {
+    pub url_repository: Arc<UrlRepository>,
 }
 
-impl<'db_pool> UrlService<'db_pool> {
-    pub fn create_short_url(self, url: String) -> String {
-        self.url_repository.insert_url(&url);
+impl UrlService {
+    pub async fn create_short_url(&self, url: String) -> String {
+        self.url_repository.insert_url(&url).await;
         url
     }
 }
