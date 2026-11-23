@@ -1,34 +1,19 @@
-mod constants;
-mod handlers;
 mod models;
-mod routes;
-mod database;
+mod controllers;
+mod services;
+mod repositories;
+mod config;
 
-use crate::constants::Env;
-use crate::routes::app;
-use models::Task;
-use std::convert::Into;
+use config::constants::Env;
+use config::database;
+use config::routes::app;
 use std::error::Error;
 
-fn seed_task() -> Vec<Task> {
-    vec![
-        Task {
-            id: 0,
-            title: "nikolis".into(),
-            done: false,
-        },
-        Task {
-            id: 1,
-            title: "maroulio".into(),
-            done: false,
-        },
-    ]
-}
+use config::state::AppState;
 
-use sqlx::postgres::PgPoolOptions;
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
-    let _ = dotenvy::dotenv().is_err_and(|err| panic!("on load dotenv: {err}"));
+    let _ = dotenvy::dotenv().expect("on load dotenv");
     let pool = database::setup_database().await?;
     let row: (i64,) = sqlx::query_as("SELECT $1")
         .bind(150_i64)
@@ -37,25 +22,17 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
     println!("row: {}",row.0);
 
-    let app = app();
+    let app_ = app(AppState::new(&pool));
     let listening_address = format!(
         "0.0.0.0:{}",
         dotenvy::var(Env::PORT.as_str()).unwrap_or(7000.to_string())
     );
 
     let listener = tokio::net::TcpListener::bind(&listening_address).await?;
-    // {
-    //     Ok(l) => l,
-    //     Err(err) => panic!("on bind: {err}"),
-    // };
 
     println!("Listening on address: {listening_address}");
 
-    axum::serve(listener, app).await?;
-    // if let Err(err) = axum::serve(listener, app).await
-    // {
-    //     panic!("on serve: {err}", )
-    // }
+    axum::serve(listener, app_).await.expect("on serve");
 
     Ok(())
 }

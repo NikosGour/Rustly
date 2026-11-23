@@ -5,6 +5,7 @@ pub(crate) enum Env {
     PostgresDb,
     PostgresRootUsername,
     PostgresRootPassword,
+    DatabaseUrl,
 }
 
 //TODO: maybe write an attribute or macro to automate this
@@ -17,6 +18,7 @@ impl Env {
             Env::PostgresDb => "POSTGRES_DB",
             Env::PostgresRootUsername => "POSTGRES_ROOT_USERNAME",
             Env::PostgresRootPassword => "POSTGRES_ROOT_PASSWORD",
+            Env::DatabaseUrl => "DATABASE_URL"
         }
     }
 
