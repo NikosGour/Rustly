@@ -15,12 +15,6 @@ use config::state::AppState;
 async fn main() -> Result<(), Box<dyn Error>> {
     let _ = dotenvy::dotenv().expect("on load dotenv");
     let pool = database::setup_database().await?;
-    let row: (i64,) = sqlx::query_as("SELECT $1")
-        .bind(150_i64)
-        .fetch_one(&pool)
-        .await?;
-
-    println!("row: {}",row.0);
 
     let app = app(AppState::new(pool));
     let listening_address = format!(

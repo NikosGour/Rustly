@@ -1,5 +1,7 @@
 use crate::repositories::UrlRepository;
 use std::sync::Arc;
+use rand::distr::SampleString;
+use crate::models::ShortenedUrl::ShortenedUrl;
 
 pub struct UrlService {
     pub url_repository: Arc<UrlRepository>,
@@ -7,7 +9,12 @@ pub struct UrlService {
 
 impl UrlService {
     pub async fn create_short_url(&self, url: String) -> String {
-        self.url_repository.insert_url(&url).await;
-        url
+        let short_url = {
+            let mut rng = rand::rng();
+            rand::distr::Alphanumeric.sample_string(&mut rng, 12)
+        };
+        let short_url_entity = ShortenedUrl::new(url, short_url.clone());
+        self.url_repository.insert_url(short_url_entity).await;
+        short_url
     }
 }
