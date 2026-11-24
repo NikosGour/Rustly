@@ -18,4 +18,14 @@ impl UrlRepository {
         .await
         .unwrap();
     }
+
+    pub async fn get_url(&self, short_url: String) -> Option<String> {
+         Some(sqlx::query!(
+            r#"SELECT "full_url" FROM "url" WHERE "short_url" = $1 AND NOT "disabled""#,
+            short_url
+        )
+        .fetch_one(self.pool.as_ref())
+        .await
+        .unwrap().full_url)
+    }
 }
