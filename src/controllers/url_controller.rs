@@ -1,5 +1,4 @@
 use crate::config::state::AppState;
-use crate::models::CreateUrlReq::CreateUrlReq;
 use crate::services::UrlService;
 use axum::extract::{Path, State};
 use axum::http::StatusCode;
@@ -7,6 +6,7 @@ use axum::response::Redirect;
 use axum::routing::{get, post};
 use axum::{Json, Router};
 use std::sync::Arc;
+use crate::dtos::CreateUrlReq;
 
 #[derive(Clone)]
 pub struct UrlController {

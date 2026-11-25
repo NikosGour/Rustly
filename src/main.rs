@@ -3,6 +3,7 @@ mod controllers;
 mod services;
 mod repositories;
 mod config;
+mod dtos;
 
 use config::constants::Env;
 use config::database;
