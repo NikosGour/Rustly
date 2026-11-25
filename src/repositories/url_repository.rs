@@ -1,7 +1,6 @@
 use crate::errors::database::Error;
 use crate::models::ShortenedUrl;
 use sqlx::PgPool;
-use sqlx::postgres::PgQueryResult;
 use std::sync::Arc;
 
 pub struct UrlRepository {
