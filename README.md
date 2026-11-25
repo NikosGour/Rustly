@@ -36,8 +36,8 @@
 ## Phase 4 – URL Management
 
 - [ ] Implement `GET /admin/url/` endpoint
-- [ ] Implement `GET /admin/urls/:id` endpoint
-- [ ] Implement `DELETE /admin/urls/:id` endpoint
+- [ ] Implement `GET /admin/url/:id` endpoint
+- [ ] Implement `DELETE /admin/url/:id` endpoint
 - [ ] Prevent duplicate short codes
 - [ ] Add URL expiration dates
 - [ ] Implement pagination
