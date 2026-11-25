@@ -1,10 +1,10 @@
-mod models;
-mod controllers;
-mod services;
-mod repositories;
 mod config;
+mod controllers;
 mod dtos;
 pub mod errors;
+mod models;
+mod repositories;
+mod services;
 
 use config::constants::Env;
 use config::database;
@@ -21,7 +21,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
     let app = app(AppState::new(pool));
     let listening_address = format!(
         "0.0.0.0:{}",
-        dotenvy::var(Env::PORT.as_str()).unwrap_or(7000.to_string())
+        dotenvy::var(Env::Port.as_str()).unwrap_or(7000.to_string())
     );
 
     let listener = tokio::net::TcpListener::bind(&listening_address).await?;

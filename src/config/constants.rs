@@ -1,5 +1,5 @@
 pub(crate) enum Env {
-    PORT,
+    Port,
     PostgresMaxConnections,
     _PostgresUrl,
     _PostgresDb,
@@ -10,15 +10,15 @@ pub(crate) enum Env {
 
 //TODO: maybe write an attribute or macro to automate this
 impl Env {
-    pub(crate) fn as_str(self) -> &'static str {
+    pub(crate) fn as_str(&self) -> &'static str {
         match self {
-            Env::PORT => "PORT",
+            Env::Port => "PORT",
             Env::PostgresMaxConnections => "POSTGRES_MAX_CONNECTIONS",
             Env::_PostgresUrl => "POSTGRES_URL",
             Env::_PostgresDb => "POSTGRES_DB",
             Env::_PostgresRootUsername => "POSTGRES_ROOT_USERNAME",
             Env::_PostgresRootPassword => "POSTGRES_ROOT_PASSWORD",
-            Env::DatabaseUrl => "DATABASE_URL"
+            Env::DatabaseUrl => "DATABASE_URL",
         }
     }
 
