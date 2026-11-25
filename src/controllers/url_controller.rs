@@ -28,9 +28,12 @@ impl UrlController {
         (StatusCode::CREATED, short_url)
     }
 
-    async fn get_url(State(state): State<AppState>, Path(short_url): Path<String>) -> Redirect {
+    async fn get_url(State(state): State<AppState>, Path(short_url): Path<String>) -> Result<Redirect, StatusCode> {
         let url_service = state.controllers.url_controller.url_service;
-        let full_url = url_service.get_url(short_url).await;
-        Redirect::temporary(&("https://".to_string() + &full_url.unwrap()))
+        let Ok(full_url) = url_service.get_url(short_url).await else {
+            return Err(StatusCode::INTERNAL_SERVER_ERROR);
+        };
+
+        Ok(Redirect::temporary(&("https://".to_string() + &full_url)))
     }
 }

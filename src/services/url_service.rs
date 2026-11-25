@@ -1,6 +1,7 @@
 use crate::repositories::UrlRepository;
 use std::sync::Arc;
 use rand::distr::SampleString;
+use crate::errors::database::Error;
 use crate::models::ShortenedUrl;
 
 pub struct UrlService {
@@ -18,7 +19,7 @@ impl UrlService {
         short_url
     }
 
-    pub async fn get_url(&self, short_url: String) -> Option<String> {
+    pub async fn get_url(&self, short_url: String) -> Result<String, Error> {
         self.url_repository.get_url(short_url).await
     }
 }

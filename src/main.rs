@@ -4,6 +4,7 @@ mod services;
 mod repositories;
 mod config;
 mod dtos;
+pub mod errors;
 
 use config::constants::Env;
 use config::database;
