@@ -1,4 +1,4 @@
-use crate::models::ShortenedUrl::ShortenedUrl;
+use crate::models::ShortenedUrl;
 use sqlx::PgPool;
 use std::sync::Arc;
 

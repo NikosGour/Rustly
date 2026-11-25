@@ -1,7 +1,7 @@
 use crate::repositories::UrlRepository;
 use std::sync::Arc;
 use rand::distr::SampleString;
-use crate::models::ShortenedUrl::ShortenedUrl;
+use crate::models::ShortenedUrl;
 
 pub struct UrlService {
     pub url_repository: Arc<UrlRepository>,
